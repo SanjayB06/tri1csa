@@ -95,6 +95,10 @@ public class Person {
     public String toString(){
         return ("{ \"email\": " + this.email + ", " + "\"password\": " + this.password + ", " + "\"name\": " + this.name + ", " + "\"dob\": " + this.dob + ", \"income\": " + this.income + ", \"job\": " + this.job + " }" );
     }
+    public String getIncome() {
+        return ("{ \"name\": " + this.name + " ," + "\"income\": " + this.income + " }" );  
+    }
+
 
     // A custom getter to return age from dob attribute
     public int getAge() {
@@ -103,6 +107,11 @@ public class Person {
             return Period.between(birthDay, LocalDate.now()).getYears(); }
         return -1;
     }
+    
+    public String getAgeToString(){
+        return ("{ \"name\": " + this.name + " ," + "\"age\": " + this.getAge() + " }" );
+    }
+
     public static void main(String[] args) {
         // Person empty object
         Person p1 = new Person();
