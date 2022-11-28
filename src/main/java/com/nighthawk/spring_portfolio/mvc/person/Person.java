@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -64,10 +65,10 @@ public class Person {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     
-    @NotEmpty
+    @Column(unique=false)
     private int income;
 
-    @NotEmpty
+    @Column(unique=false)
     private String job;
 
     /* HashMap is used to store JSON for daily "stats"
@@ -78,9 +79,9 @@ public class Person {
         }
     }
     */
-    @Type(type="json")
-    @Column(columnDefinition = "jsonb")
-    private Map<String,Map<String, Object>> stats = new HashMap<>(); 
+    // @Type(type="json")
+    // @Column(columnDefinition = "jsonb")
+    // private Map<String,Map<String, Object>> stats = new HashMap<>(); 
     
 
     // Constructor used when building object from an API
@@ -92,13 +93,10 @@ public class Person {
         this.income = income;
         this.job = job;
     }
+
     public String toString(){
         return ("{ \"email\": " + this.email + ", " + "\"password\": " + this.password + ", " + "\"name\": " + this.name + ", " + "\"dob\": " + this.dob + ", \"income\": " + this.income + ", \"job\": " + this.job + " }" );
     }
-    public String getIncome() {
-        return ("{ \"name\": " + this.name + " ," + "\"income\": " + this.income + " }" );  
-    }
-
 
     // A custom getter to return age from dob attribute
     public int getAge() {
@@ -107,23 +105,24 @@ public class Person {
             return Period.between(birthDay, LocalDate.now()).getYears(); }
         return -1;
     }
-    
+
     public String getAgeToString(){
         return ("{ \"name\": " + this.name + " ," + "\"age\": " + this.getAge() + " }" );
     }
+    public String getIncomeToString(){
+        return ("{ \"name\": " + this.name + " ," + "\"income\": " + this.income + " }" );
+    }
 
-    public static void main(String[] args) {
-        // Person empty object
+
+
+    public static void main(String[] args) throws ParseException{
+        Date dob2 = new GregorianCalendar(2005, 3, 4).getTime();
+
         Person p1 = new Person();
+        Person p2 = new Person("sanjayb@gmail.com", "6006", "Sanjay Bharadwaj", dob2, 200000, "student" );
 
-        // using gregorian calendar to initialize tester date object
-        Date dob2 = new GregorianCalendar(2006, 5, 3).getTime();
-        Person p2 = new Person("sanjayb@gmail.com", "sanjayb", "Sanjay Bharadwaj", dob2, 200000, "student");
-        
-        
         System.out.println(p1);
         System.out.println(p2);
-     }
-
+    }
 
 }
