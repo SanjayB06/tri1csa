@@ -64,6 +64,11 @@ public class Person {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     
+    @NotEmpty
+    private int income;
+
+    @NotEmpty
+    private String job;
 
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
@@ -79,14 +84,16 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob) {
+    public Person(String email, String password, String name, Date dob, int income, String job) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
+        this.income = income;
+        this.job = job;
     }
     public String toString(){
-        return ("{ \"email\": " + this.email + ", " + "\"password\": " + this.password + ", " + "\"name\": " + this.name + ", " + "\"dob\": " + this.dob + " }" );
+        return ("{ \"email\": " + this.email + ", " + "\"password\": " + this.password + ", " + "\"name\": " + this.name + ", " + "\"dob\": " + this.dob + ", \"income\": " + this.income + ", \"job\": " + this.job + " }" );
     }
 
     // A custom getter to return age from dob attribute
@@ -102,7 +109,7 @@ public class Person {
 
         // using gregorian calendar to initialize tester date object
         Date dob2 = new GregorianCalendar(2006, 5, 3).getTime();
-        Person p2 = new Person("sanjayb@gmail.com", "sanjayb", "Sanjay Bharadwaj", dob2);
+        Person p2 = new Person("sanjayb@gmail.com", "sanjayb", "Sanjay Bharadwaj", dob2, 200000, "student");
         
         
         System.out.println(p1);
