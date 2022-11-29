@@ -1,6 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -20,8 +19,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.springframework.data.mongodb.core.schema.JsonSchemaObject.Type.JsonType;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.vladmihalcea.hibernate.type.json.JsonType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -79,9 +79,9 @@ public class Person {
         }
     }
     */
-    // @Type(type = "json")
-    // @Column(columnDefinition = "jsonb")
-    // private Map<String, Map<String, Object>> stats = new HashMap<>();
+    @Type(type = "json")
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Map<String, Object>> stats = new HashMap<>();
     
 
     // Constructor used when building object from an API
@@ -115,7 +115,7 @@ public class Person {
 
 
 
-    public static void main(String[] args) throws ParseException{
+    public static void main(String[] args){
         Date dob2 = new GregorianCalendar(2005, 3, 4).getTime();
 
         Person p1 = new Person();
