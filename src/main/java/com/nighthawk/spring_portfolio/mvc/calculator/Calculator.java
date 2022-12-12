@@ -26,7 +26,7 @@ public class Calculator {
     {
         // Map<"token", precedence>
         OPERATORS.put("RT", 1);
-        OPERATORS.put("POW", 2);
+        OPERATORS.put("exp", 2);
         OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
         OPERATORS.put("/", 3);
@@ -48,7 +48,21 @@ public class Calculator {
     public Calculator(String expression) {
         // original input
         this.expression = expression;
+        int leftParentheses = 0;
+        int rightParentheses = 0;
+        for (int i = 0; i < this.expression.length(); i++) {
+            if (this.expression.charAt(i) == '(') {
+                leftParentheses++;
+            } else if (this.expression.charAt(i) == ')') {
+                rightParentheses++;
+            }
+        }
 
+        if (leftParentheses != rightParentheses) {
+            throw new NumberFormatException("Parentheses are not balanced.");
+        }
+
+        // this.parenthesesCheck();
         // parse expression into terms
         this.termTokenizer();
 
@@ -138,7 +152,7 @@ public class Calculator {
                 case "/":
                 case "%":
                 case "^":
-                case "POW":
+                case "exp":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -173,10 +187,11 @@ public class Calculator {
                     {
                         // Resolve variable to 0 in order for the rest of the function to successfully run.
                         this.reverse_polish.add("0");
-                        this.expression = "Error with parsing your expression \'" + this.expression + "\'. Please enter valid numbers, operators, or variables and try again.";
+                        this.expression = " \'" + this.expression + "\' is invalid. Try again with a correct expression.";
                         break;
                     }
                     this.reverse_polish.add(token);
+        
             }
         }
         // Empty remaining tokens
@@ -226,9 +241,7 @@ public class Calculator {
                         result = b % a;
                         break;
                     case "^":
-                    // had to implement POW because the ^ threw an error (likely due to something within the api method)
-                    case "POW":
-                        // Using Math.pow() function because it supports doubles
+                    case "exp":
                         result = Math.pow(b,a);
                         break;
                     default:
@@ -247,13 +260,12 @@ public class Calculator {
                 calcStack.push(Double.valueOf(token));
             }
         }
-        // Pop final result and set as final result for expression
         this.result = calcStack.pop();
     }
 
 
     public String jsonify() {
-        String json = "{ \"Expression\": \"" + this.expression + "\", \"Tokens\": \"" + this.tokens + "\", \"RPN\": \"" + this.reverse_polish + "\", \"Result\": " + this.result + " }";
+        String json = "{ \"Problem\": \"" + this.expression + "\", \"Tokens\": \"" + this.tokens + "\", \"Polish Notation\": \"" + this.reverse_polish + "\", \"Answer\": " + this.result + " }";
         return json;
     }
     public String toString() {
@@ -265,28 +277,38 @@ public class Calculator {
 
     public static void main(String[] args) {
         // Random set of test cases
-        Calculator simpleMath = new Calculator("100 + 200  * 3");
+        Calculator simpleMath = new Calculator("3 + 4  * 2");
         System.out.println("Simple Math\n" + simpleMath);
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
+        Calculator parenthesisMath = new Calculator("(3+4)  * 2");
         System.out.println("Parenthesis Math\n" + parenthesisMath);
 
         System.out.println();
 
-        Calculator decimalMath = new Calculator("100.2 - 99.3");
+        Calculator decimalMath = new Calculator("101.4-90");
         System.out.println("Decimal Math\n" + decimalMath);
 
         System.out.println();
 
-        Calculator moduloMath = new Calculator("300 % 200");
+        Calculator moduloMath = new Calculator("400*5");
         System.out.println("Modulo Math\n" + moduloMath);
 
         System.out.println();
 
-        Calculator divisionMath = new Calculator("300/200");
+        Calculator divisionMath = new Calculator("500/20");
         System.out.println("Division Math\n" + divisionMath);
+
+        System.out.println();
+
+        Calculator exponentmath = new Calculator("3 exp 3");
+        System.out.println("Exponent Math\n" + exponentmath);
+
+        System.out.println();
+
+        Calculator exceptionmath = new Calculator("(5+3))");
+        System.out.println("Exponent Math\n" + exceptionmath);
 
     }
 

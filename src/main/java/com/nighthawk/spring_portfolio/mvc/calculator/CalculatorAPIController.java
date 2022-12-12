@@ -12,11 +12,10 @@ import java.util.*;
 @RequestMapping("/api/calculator")
 public class CalculatorAPIController {
 
-    @GetMapping("/{expression}")
-    public ResponseEntity<String> getResult(@PathVariable String expression) {
+    @GetMapping("/{problem}")
+    public ResponseEntity<String> getResult(@PathVariable String problem) {
 
-        // Returns jsonified result of expression with tokens and everything
-        Calculator a = new Calculator(expression);
+        Calculator a = new Calculator(problem);
         String result = a.jsonify();
         if (result != null) {
             return new ResponseEntity<String>(result, HttpStatus.OK);
